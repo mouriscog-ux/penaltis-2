@@ -4,90 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brasileirão Penalty Cup 2026 - Master Spec</title>
+    <title>Brasileirão Penalty 2026 - FIX TOTAL</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div id="game-container">
-        <!-- Stadium Backdrop -->
-        <div id="stadium-bg"></div>
-
-        <!-- Game Canvas Layer -->
+        <div id="stadium"></div>
         <canvas id="game-canvas"></canvas>
 
-        <!-- UI Interaction Layers -->
         <div id="ui-layer">
-            <!-- Main Menu -->
+            <!-- Screen: Menu -->
             <div id="menu-screen" class="screen active">
-                <div class="logo-box">
-                    <h1>BRASILEIRÃO <span>PENALTY CUP</span></h1>
-                    <p class="edition">EDITION 2026</p>
+                <h1>BRASILEIRÃO <span>PENALTY cup</span></h1>
+                <div class="difficulty-box">
+                    <button class="diff-btn active" data-diff="normal">NORMAL</button>
+                    <button class="diff-btn" data-diff="hard">HARD</button>
+                    <button class="diff-btn" data-diff="super-hard">SUPER HARD</button>
                 </div>
-                <div class="difficulty-options">
-                    <p>DIFICULDADE:</p>
-                    <div class="diff-btn-group">
-                        <button class="diff-btn active" data-diff="normal">NORMAL</button>
-                        <button class="diff-btn" data-diff="hard">HARD</button>
-                        <button class="diff-btn" data-diff="super-hard">SUPER HARD</button>
-                    </div>
-                </div>
-                <button id="start-btn" class="main-button">INICIAR TORNEIO</button>
+                <button id="start-btn" class="main-button">INICIAR JOGO</button>
             </div>
 
-            <!-- Team Choice -->
+            <!-- Screen: Team Select -->
             <div id="team-screen" class="screen">
-                <h2>SELECIONE SEU CLUBE</h2>
-                <div id="team-grid" class="scrollable-grid"></div>
+                <h2>SELECIONE SEU TIME</h2>
+                <div id="team-grid" class="team-grid"></div>
             </div>
 
-            <!-- Match Intro -->
+            <!-- Screen: Intro -->
             <div id="intro-screen" class="screen">
-                <h3 id="stage-name">OITAVAS DE FINAL</h3>
-                <div class="match-layout">
-                    <div id="p-card" class="team-card">PLAYER</div>
-                    <div class="vs-text">VS</div>
-                    <div id="c-card" class="team-card">CPU</div>
+                <h2 id="phase-name">OITAVAS DE FINAL</h2>
+                <div class="matchup">
+                    <div id="p-team-card" class="team-card">TIMÃO</div>
+                    <div class="vs">VS</div>
+                    <div id="c-team-card" class="team-card">RIVAL</div>
                 </div>
                 <button id="play-btn" class="main-button">ENTRAR EM CAMPO</button>
             </div>
 
-            <!-- HUD (Gameplay Stats) -->
+            <!-- Gameplay: HUD -->
             <div id="hud" class="hud-layer hidden">
-                <div class="score-container">
-                    <div class="team-info left">
-                        <span id="p-name">PAL</span>
-                        <div class="shield-dot" id="p-shield"></div>
-                    </div>
-                    <div class="match-score">
-                        <span id="p-score">0</span>:<span id="c-score">0</span>
-                    </div>
-                    <div class="team-info right">
-                        <div class="shield-dot" id="c-shield"></div>
-                        <span id="c-name">FLA</span>
-                    </div>
+                <div id="scoreboard" class="scoreboard">
+                    <div id="p-name">PAL</div>
+                    <div class="score"><span id="p-score">0</span> - <span id="c-score">0</span></div>
+                    <div id="c-name">FLA</div>
                 </div>
-                <div class="turn-indicator">
-                    <span id="instruction-text">SUA VEZ DE BATER!</span>
-                </div>
+                <div id="status-msg" class="status-msg">SUA VEZ DE BATER!</div>
             </div>
 
-            <!-- Transitions and Results -->
+            <!-- Screen: Transitions -->
             <div id="result-screen" class="screen">
-                <h2 id="result-title">VITÓRIA!</h2>
-                <button id="next-btn" class="main-button">PRÓXIMA FASE</button>
-                <button id="restart-btn" class="secondary-button hidden">RECOMEÇAR</button>
+                <h2 id="result-text">VITÓRIA!</h2>
+                <button id="next-phase-btn" class="main-button">PRÓXIMA FASE</button>
+                <button onclick="location.reload()" class="secondary-button hidden" id="retry-btn">RECOMEÇAR</button>
             </div>
 
-            <!-- Trophy Screen -->
+            <!-- Champion -->
             <div id="champion-screen" class="screen">
-                <div class="trophy-display">🏆</div>
+                <div class="trophy-icon">🏆</div>
                 <h1>CAMPEÃO NACIONAL</h1>
-                <h2 id="champ-team">PALMEIRAS</h2>
-                <button onclick="location.reload()" class="main-button">VOLTAR AO MENU</button>
+                <h2 id="champ-name">TIME</h2>
+                <button onclick="location.reload()" class="main-button">MENU INICIAL</button>
             </div>
         </div>
     </div>
