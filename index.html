@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brasileirão Penalty Cup 2026</title>
+    <title>Brasileirão Penalty Cup 2026 - Master Spec</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,80 +13,84 @@
 
 <body>
     <div id="game-container">
-        <!-- Stadium Background -->
+        <!-- Stadium Backdrop -->
         <div id="stadium-bg"></div>
 
-        <!-- Game Stage -->
+        <!-- Game Canvas Layer -->
         <canvas id="game-canvas"></canvas>
 
-        <!-- UI Overlays -->
+        <!-- UI Interaction Layers -->
         <div id="ui-layer">
-            <!-- State 0: Menu/Selection -->
+            <!-- Main Menu -->
             <div id="menu-screen" class="screen active">
-                <div class="logo-container">
+                <div class="logo-box">
                     <h1>BRASILEIRÃO <span>PENALTY CUP</span></h1>
-                    <p class="tagline">PROTOCOLO MESTRE 2026</p>
+                    <p class="edition">EDITION 2026</p>
                 </div>
-                <button id="start-btn" class="main-button">JOGAR AGORA</button>
+                <div class="difficulty-options">
+                    <p>DIFICULDADE:</p>
+                    <div class="diff-btn-group">
+                        <button class="diff-btn active" data-diff="normal">NORMAL</button>
+                        <button class="diff-btn" data-diff="hard">HARD</button>
+                        <button class="diff-btn" data-diff="super-hard">SUPER HARD</button>
+                    </div>
+                </div>
+                <button id="start-btn" class="main-button">INICIAR TORNEIO</button>
             </div>
 
-            <!-- Team Selection -->
+            <!-- Team Choice -->
             <div id="team-screen" class="screen">
-                <h2>ESCOLHA SEU ESCUDO</h2>
+                <h2>SELECIONE SEU CLUBE</h2>
                 <div id="team-grid" class="scrollable-grid"></div>
             </div>
 
-            <!-- Difficulty Selection -->
-            <div id="difficulty-screen" class="screen">
-                <h2>NÍVEL DO GOLEIRO</h2>
-                <div class="difficulty-options">
-                    <button class="diff-btn" data-diff="normal">NORMAL (25%)</button>
-                    <button class="diff-btn" data-diff="hard">HARD (50%)</button>
-                    <button class="diff-btn" data-diff="super-hard">SUPER HARD (85%)</button>
-                </div>
-            </div>
-
-            <!-- Tournament Roadmap -->
+            <!-- Match Intro -->
             <div id="intro-screen" class="screen">
-                <h2 id="stage-title">OITAVAS DE FINAL</h2>
-                <div class="matchup">
-                    <div id="player-team-display" class="team-card">TIMÃO</div>
-                    <div class="vs">VS</div>
-                    <div id="cpu-team-display" class="team-card">RIVAL</div>
+                <h3 id="stage-name">OITAVAS DE FINAL</h3>
+                <div class="match-layout">
+                    <div id="p-card" class="team-card">PLAYER</div>
+                    <div class="vs-text">VS</div>
+                    <div id="c-card" class="team-card">CPU</div>
                 </div>
                 <button id="play-btn" class="main-button">ENTRAR EM CAMPO</button>
             </div>
 
-            <!-- HUD (Score & Status) -->
-            <div id="hud" class="hud-overlay hidden">
-                <div class="scoreboard">
-                    <div id="p-name" class="name">PAL</div>
-                    <div class="score"><span id="p-score">0</span> - <span id="c-score">0</span></div>
-                    <div id="c-name" class="name">FLA</div>
+            <!-- HUD (Gameplay Stats) -->
+            <div id="hud" class="hud-layer hidden">
+                <div class="score-container">
+                    <div class="team-info left">
+                        <span id="p-name">PAL</span>
+                        <div class="shield-dot" id="p-shield"></div>
+                    </div>
+                    <div class="match-score">
+                        <span id="p-score">0</span>:<span id="c-score">0</span>
+                    </div>
+                    <div class="team-info right">
+                        <div class="shield-dot" id="c-shield"></div>
+                        <span id="c-name">FLA</span>
+                    </div>
                 </div>
-                <div class="status-bar">
-                    <div id="instruction-text">SUA VEZ DE BATER!</div>
+                <div class="turn-indicator">
+                    <span id="instruction-text">SUA VEZ DE BATER!</span>
                 </div>
             </div>
 
-            <!-- Result Phase -->
+            <!-- Transitions and Results -->
             <div id="result-screen" class="screen">
-                <h2 id="result-text">VITÓRIA!</h2>
-                <button id="next-btn" class="main-button">AVANÇAR DE FASE</button>
-                <button id="restart-btn" class="secondary-button hidden">TENTAR NOVAMENTE</button>
+                <h2 id="result-title">VITÓRIA!</h2>
+                <button id="next-btn" class="main-button">PRÓXIMA FASE</button>
+                <button id="restart-btn" class="secondary-button hidden">RECOMEÇAR</button>
             </div>
 
-            <!-- Finale -->
+            <!-- Trophy Screen -->
             <div id="champion-screen" class="screen">
-                <div class="trophy-anim">🏆</div>
+                <div class="trophy-display">🏆</div>
                 <h1>CAMPEÃO NACIONAL</h1>
-                <h2 id="champion-name"></h2>
-                <button id="home-btn" class="main-button">MENU PRINCIPAL</button>
+                <h2 id="champ-team">PALMEIRAS</h2>
+                <button onclick="location.reload()" class="main-button">VOLTAR AO MENU</button>
             </div>
         </div>
     </div>
-
-    <!-- Core logic -->
     <script src="game.js"></script>
 </body>
 
