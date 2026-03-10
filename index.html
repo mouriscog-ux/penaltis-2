@@ -13,31 +13,27 @@
 
 <body>
     <div id="game-container">
-        <!-- Background Layers -->
         <div id="stadium-bg"></div>
-
-        <!-- Game Canvas -->
         <canvas id="game-canvas"></canvas>
 
-        <!-- UI Overlay Layer -->
         <div id="ui-layer">
-            <!-- Main Menu -->
+            <!-- Screen 1: Menu -->
             <div id="menu-screen" class="screen active">
                 <div class="logo-container">
                     <h1>BRASILEIRÃO <span>PENALTY CUP</span></h1>
-                    <p class="year">2026</p>
+                    <p class="year">2026 - PROTOCOLO FINAL</p>
                 </div>
                 <button id="start-btn" class="main-button">INICIAR JORNADA</button>
             </div>
 
-            <!-- Team Selection -->
+            <!-- Screen 2: Select Team -->
             <div id="team-screen" class="screen">
-                <h2>ESCOLHA SEU TIME</h2>
+                <h2>ESCOLHA SEU CLUBE</h2>
                 <div id="team-grid" class="scrollable-grid"></div>
                 <button id="cancel-team" class="secondary-button">VOLTAR</button>
             </div>
 
-            <!-- Difficulty Selection -->
+            <!-- Screen 3: Difficulty -->
             <div id="difficulty-screen" class="screen">
                 <h2>DIFICULDADE</h2>
                 <div class="difficulty-options">
@@ -45,53 +41,48 @@
                     <button class="diff-btn" data-diff="hard">HARD</button>
                     <button class="diff-btn" data-diff="super-hard">SUPER HARD</button>
                 </div>
-                <button id="cancel-diff" class="secondary-button">VOLTAR</button>
             </div>
 
-            <!-- Tournament Roadmap / Intro -->
+            <!-- Screen 4: Phase Intro -->
             <div id="intro-screen" class="screen">
                 <h2 id="stage-title">OITAVAS DE FINAL</h2>
                 <div class="matchup">
-                    <div id="player-team-display" class="team-card"></div>
+                    <div id="player-team-display" class="team-card">PLAYER</div>
                     <div class="vs">VS</div>
-                    <div id="cpu-team-display" class="team-card"></div>
+                    <div id="cpu-team-display" class="team-card">CPU</div>
                 </div>
                 <button id="play-btn" class="main-button">ENTRAR EM CAMPO</button>
             </div>
 
-            <!-- HUD during gameplay -->
+            <!-- Gameplay HUD -->
             <div id="hud" class="hud-overlay">
                 <div class="scoreboard">
-                    <div id="p-team-name" class="name">PLAYER</div>
+                    <div id="p-team-name" class="name">PALMEIRAS</div>
                     <div class="score"><span id="p-score">0</span> - <span id="c-score">0</span></div>
-                    <div id="c-team-name" class="name">CPU</div>
+                    <div id="c-team-name" class="name">FLAMENGO</div>
                 </div>
+                <div id="diff-indicator" class="diff-tag">NORMAL</div>
                 <div class="status-bar">
-                    <div id="instruction-text">Sua vez de bater!</div>
-                </div>
-                <div id="goalie-controls" class="controls-hint hidden">
-                    Use as setas ← → para pular!
+                    <div id="instruction-text">SUA VEZ DE BATER!</div>
                 </div>
             </div>
 
-            <!-- Transition / Results -->
+            <!-- Results -->
             <div id="result-screen" class="screen">
                 <h2 id="result-text">VITÓRIA!</h2>
                 <button id="next-btn" class="main-button">PRÓXIMA FASE</button>
                 <button id="restart-btn" class="main-button hidden">TENTAR NOVAMENTE</button>
-                <button id="menu-btn" class="secondary-button hidden">MENU PRINCIPAL</button>
             </div>
 
-            <!-- Final Champion -->
+            <!-- Champion -->
             <div id="champion-screen" class="screen">
-                <div class="trophy-container animate-bounce">🏆</div>
+                <div class="trophy">🏆</div>
                 <h2>CAMPEÃO NACIONAL 2026</h2>
-                <p id="champion-team-name"></p>
-                <button id="home-btn" class="main-button">MENU INICIAL</button>
+                <p id="champion-team-name">TIMÃO</p>
+                <button id="home-btn" class="main-button">VOLTAR AO INÍCIO</button>
             </div>
         </div>
     </div>
-
     <script src="game.js"></script>
 </body>
 
