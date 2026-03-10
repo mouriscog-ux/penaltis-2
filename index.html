@@ -13,76 +13,80 @@
 
 <body>
     <div id="game-container">
+        <!-- Stadium Background -->
         <div id="stadium-bg"></div>
+
+        <!-- Game Stage -->
         <canvas id="game-canvas"></canvas>
 
+        <!-- UI Overlays -->
         <div id="ui-layer">
-            <!-- Screen 1: Menu -->
+            <!-- State 0: Menu/Selection -->
             <div id="menu-screen" class="screen active">
                 <div class="logo-container">
                     <h1>BRASILEIRÃO <span>PENALTY CUP</span></h1>
-                    <p class="year">2026 - PROTOCOLO FINAL</p>
+                    <p class="tagline">PROTOCOLO MESTRE 2026</p>
                 </div>
-                <button id="start-btn" class="main-button">INICIAR JORNADA</button>
+                <button id="start-btn" class="main-button">JOGAR AGORA</button>
             </div>
 
-            <!-- Screen 2: Select Team -->
+            <!-- Team Selection -->
             <div id="team-screen" class="screen">
-                <h2>ESCOLHA SEU CLUBE</h2>
+                <h2>ESCOLHA SEU ESCUDO</h2>
                 <div id="team-grid" class="scrollable-grid"></div>
-                <button id="cancel-team" class="secondary-button">VOLTAR</button>
             </div>
 
-            <!-- Screen 3: Difficulty -->
+            <!-- Difficulty Selection -->
             <div id="difficulty-screen" class="screen">
-                <h2>DIFICULDADE</h2>
+                <h2>NÍVEL DO GOLEIRO</h2>
                 <div class="difficulty-options">
-                    <button class="diff-btn" data-diff="normal">NORMAL</button>
-                    <button class="diff-btn" data-diff="hard">HARD</button>
-                    <button class="diff-btn" data-diff="super-hard">SUPER HARD</button>
+                    <button class="diff-btn" data-diff="normal">NORMAL (25%)</button>
+                    <button class="diff-btn" data-diff="hard">HARD (50%)</button>
+                    <button class="diff-btn" data-diff="super-hard">SUPER HARD (85%)</button>
                 </div>
             </div>
 
-            <!-- Screen 4: Phase Intro -->
+            <!-- Tournament Roadmap -->
             <div id="intro-screen" class="screen">
                 <h2 id="stage-title">OITAVAS DE FINAL</h2>
                 <div class="matchup">
-                    <div id="player-team-display" class="team-card">PLAYER</div>
+                    <div id="player-team-display" class="team-card">TIMÃO</div>
                     <div class="vs">VS</div>
-                    <div id="cpu-team-display" class="team-card">CPU</div>
+                    <div id="cpu-team-display" class="team-card">RIVAL</div>
                 </div>
                 <button id="play-btn" class="main-button">ENTRAR EM CAMPO</button>
             </div>
 
-            <!-- Gameplay HUD -->
-            <div id="hud" class="hud-overlay">
+            <!-- HUD (Score & Status) -->
+            <div id="hud" class="hud-overlay hidden">
                 <div class="scoreboard">
-                    <div id="p-team-name" class="name">PALMEIRAS</div>
+                    <div id="p-name" class="name">PAL</div>
                     <div class="score"><span id="p-score">0</span> - <span id="c-score">0</span></div>
-                    <div id="c-team-name" class="name">FLAMENGO</div>
+                    <div id="c-name" class="name">FLA</div>
                 </div>
-                <div id="diff-indicator" class="diff-tag">NORMAL</div>
                 <div class="status-bar">
                     <div id="instruction-text">SUA VEZ DE BATER!</div>
                 </div>
             </div>
 
-            <!-- Results -->
+            <!-- Result Phase -->
             <div id="result-screen" class="screen">
                 <h2 id="result-text">VITÓRIA!</h2>
-                <button id="next-btn" class="main-button">PRÓXIMA FASE</button>
-                <button id="restart-btn" class="main-button hidden">TENTAR NOVAMENTE</button>
+                <button id="next-btn" class="main-button">AVANÇAR DE FASE</button>
+                <button id="restart-btn" class="secondary-button hidden">TENTAR NOVAMENTE</button>
             </div>
 
-            <!-- Champion -->
+            <!-- Finale -->
             <div id="champion-screen" class="screen">
-                <div class="trophy">🏆</div>
-                <h2>CAMPEÃO NACIONAL 2026</h2>
-                <p id="champion-team-name">TIMÃO</p>
-                <button id="home-btn" class="main-button">VOLTAR AO INÍCIO</button>
+                <div class="trophy-anim">🏆</div>
+                <h1>CAMPEÃO NACIONAL</h1>
+                <h2 id="champion-name"></h2>
+                <button id="home-btn" class="main-button">MENU PRINCIPAL</button>
             </div>
         </div>
     </div>
+
+    <!-- Core logic -->
     <script src="game.js"></script>
 </body>
 
