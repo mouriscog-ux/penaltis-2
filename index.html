@@ -4,90 +4,651 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brasileirão Penalty Cup 2026 - DEFINITIVO</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>PENALTY 3D BRASILEIRÃO 2026 - V 5.0 SUPREMO</title>
+    <style>
+        :root {
+            --neon-blue: #00d2ff;
+            --neon-pink: #ff007f;
+            --neon-green: #39ff14;
+            --pitch-dark: #050a05;
+            --p-color: #39ff14;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #game-frame {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 1280px;
+            max-height: 720px;
+            border: 3px solid #111;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 1);
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            background: var(--pitch-dark);
+            cursor: crosshair;
+        }
+
+        /* Screens */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .overlay.active {
+            display: flex;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 950;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            line-height: 0.85;
+        }
+
+        h1 span {
+            color: var(--neon-blue);
+            text-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 380px;
+            overflow-y: auto;
+            background: #080808;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #222;
+        }
+
+        .team-btn {
+            background: #121212;
+            border: 2px solid #333;
+            color: #fff;
+            padding: 15px;
+            font-weight: 850;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .team-btn:hover {
+            border-color: var(--neon-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+        }
+
+        .btn-action {
+            background: var(--neon-blue);
+            color: #000;
+            border: none;
+            padding: 1.2rem 4rem;
+            font-size: 2rem;
+            font-weight: 950;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 30px;
+            transition: 0.3s;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px var(--neon-blue);
+        }
+
+        /* HUD */
+        .hud-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .hud-box {
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 4px solid var(--p-color);
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-weight: 900;
+            font-size: 1.4rem;
+        }
+
+        .score-live {
+            font-size: 4rem;
+            font-weight: 950;
+            filter: drop-shadow(0 0 10px var(--neon-blue));
+        }
+
+        .feedback-text {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 9rem;
+            font-weight: 950;
+            z-index: 85;
+            text-transform: uppercase;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.1s;
+        }
+
+        /* 3D Sliders */
+        .control-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 60;
+        }
+
+        .slider-bar {
+            width: 300px;
+            height: 15px;
+            background: #111;
+            border: 1px solid #333;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .slider-cursor {
+            position: absolute;
+            top: 0;
+            width: 10px;
+            height: 100%;
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .slider-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            opacity: 0.6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="game-container">
-        <!-- Render 1: Campo e Estádio -->
-        <div id="field"></div>
-        <canvas id="game-canvas"></canvas>
+    <div id="game-frame">
+        <canvas id="main-cv"></canvas>
 
-        <div id="ui-layer">
-            <!-- Tópico 2: Seleção de Elite -->
-            <div id="menu-screen" class="screen active">
-                <div class="header">
-                    <h1>BRASILEIRÃO <span>PENALTY CUP</span></h1>
-                    <p>PROTOCOLO DEFINITIVO 2026</p>
-                </div>
+        <!-- Tópico 18: HUD -->
+        <div id="hud-match" class="hud-top hidden">
+            <div class="hud-box" id="lbl-usr">TIME</div>
+            <div class="score-live"><span id="sc-usr">0</span> : <span id="sc-cpu">0</span></div>
+            <div class="hud-box" id="lbl-cpu">CPU</div>
+        </div>
 
-                <div class="diff-selector">
-                    <p>DIFICULDADE:</p>
-                    <div class="diff-group">
-                        <button class="diff-btn active" data-diff="normal">NORMAL</button>
-                        <button class="diff-btn" data-diff="hard">HARD</button>
-                        <button class="diff-btn" data-diff="super-hard">SUPER HARD</button>
-                    </div>
-                </div>
+        <div id="pop-status" class="feedback-text">GOOOL!</div>
 
-                <div class="team-selection">
-                    <p>ESCOLHA SEU ESCUDO:</p>
-                    <div id="team-grid" class="scroll-grid"></div>
-                </div>
+        <!-- Tópico 2: Sliders -->
+        <div id="shoot-controls" class="control-panel hidden">
+            <div class="slider-label" id="slider-txt">DIREÇÃO (X)</div>
+            <div class="slider-bar">
+                <div id="cur-x" class="slider-cursor" style="left: 50%;"></div>
             </div>
-
-            <!-- Tópico 6: Estrutura de Torneio -->
-            <div id="intro-screen" class="screen">
-                <h2 id="phase-title">OITAVAS DE FINAL</h2>
-                <div class="match-card">
-                    <div id="p-card" class="team-box">PLAYER</div>
-                    <div class="vs-label">VS</div>
-                    <div id="c-card" class="team-box">CPU</div>
-                </div>
-                <button id="start-match-btn" class="battle-button">ENTRAR EM CAMPO</button>
-            </div>
-
-            <!-- Tópico 8: HUD e Feedback -->
-            <div id="hud" class="game-hud hidden">
-                <div id="scoreboard" class="score-bar">
-                    <div class="side left">
-                        <span id="p-tag">PAL</span>
-                        <div class="dot" id="p-dot"></div>
-                    </div>
-                    <div class="center-score">
-                        <span id="p-score">0</span>:<span id="c-score">0</span>
-                    </div>
-                    <div class="side right">
-                        <div class="dot" id="c-dot"></div>
-                        <span id="c-tag">FLA</span>
-                    </div>
-                </div>
-                <div class="status-wrap">
-                    <h3 id="instruction-msg">SUA VEZ DE BATER!</h3>
-                </div>
-            </div>
-
-            <!-- Resultados -->
-            <div id="result-screen" class="screen">
-                <h2 id="result-msg">GOOOOL!</h2>
-                <button id="next-action-btn" class="battle-button">CONTINUAR</button>
-                <button id="final-advance-btn" class="battle-button hidden">AVANÇAR FASE</button>
-                <button onclick="location.reload()" id="restart-btn" class="battle-button hidden">TENTAR
-                    NOVAMENTE</button>
-            </div>
-
-            <!-- Campeão -->
-            <div id="champion-screen" class="screen">
-                <div class="trophy">🏆</div>
-                <h1>CAMPEÃO NACIONAL</h1>
-                <h2 id="winner-team">TIME</h2>
-                <button onclick="location.reload()" class="battle-button">VOLTAR AO INÍCIO</button>
+            <div class="slider-bar">
+                <div id="cur-y" class="slider-cursor" style="left: 0%;"></div>
             </div>
         </div>
+
+        <!-- Screens -->
+        <div id="scr-menu" class="overlay active">
+            <h1>PENALTY <span>3D 2026</span></h1>
+            <p style="margin-bottom: 20px; font-weight: 900; opacity: 0.5; font-size: 0.8rem;">CLUBES SÉRIE A -
+                PROTOCOLO V5.0</p>
+            <div class="team-grid" id="team-list"></div>
+        </div>
+
+        <div id="scr-intro" class="overlay">
+            <p id="stg-title"
+                style="font-weight: 950; color: var(--neon-blue); letter-spacing: 12px; margin-bottom: 10px;">OITAVAS DE
+                FINAL</p>
+            <h1 id="match-label">JOGADOR VS RIVAL</h1>
+            <button class="btn-action" id="btn-start">IR PARA O JOGO</button>
+        </div>
+
+        <!-- Tópico 9: Passou de Fase -->
+        <div id="scr-pass" class="overlay">
+            <div style="font-size: 10rem; margin-bottom: 1rem;">🔥</div>
+            <h1>PARABÉNS! <span>PASSOU DE FASE!</span></h1>
+            <p id="pass-msg" style="font-size: 1.5rem; opacity: 0.6;">AVANÇANDO NO MATA-MATA NACIONAL</p>
+            <button class="btn-action" id="btn-next">IR PARA A PRÓXIMA</button>
+        </div>
+
+        <div id="scr-loss" class="overlay">
+            <h1 style="color: var(--neon-pink);">ELIMINADO!</h1>
+            <p style="font-size: 1.2rem; opacity: 0.5;">FIM DE SONHO NO BRASILEIRÃO 2026</p>
+            <button class="btn-action" onclick="location.reload()">RECOMEÇAR TORNEIO</button>
+        </div>
+
+        <div id="scr-final" class="overlay">
+            <div style="font-size: 12rem; margin-bottom: 1rem;">🏆</div>
+            <h1>CAMPEÃO <span>DO BRASIL 2026</span></h1>
+            <h2 id="final-winner" style="font-size: 3rem; color: var(--neon-green);">TIME</h2>
+            <button class="btn-action" onclick="location.reload()">NOVA JORNADA</button>
+        </div>
     </div>
-    <script src="game.js"></script>
+
+    <script>
+        /**
+         * BRASILEIRÃO PENALTY 3D 2026 - V 5.0 ANTI-BUG
+         * MANUAL DE ENGENHARIA 35 TÓPICOS
+         */
+
+        const CLUBS = [
+            { n: "Palmeiras", c: "#006400" }, { n: "Flamengo", c: "#ff0000" },
+            { n: "Botafogo", c: "#000000" }, { n: "Fortaleza", c: "#001e9c" },
+            { n: "São Paulo", c: "#ff0000" }, { n: "Internacional", c: "#e30613" },
+            { n: "Cruzeiro", c: "#003399" }, { n: "Bahia", c: "#005baa" },
+            { n: "Corinthians", c: "#ffffff" }, { n: "Vasco", c: "#000000" },
+            { n: "Grêmio", c: "#00aae4" }, { n: "Atlético-MG", c: "#000000" },
+            { n: "Fluminense", c: "#800020" }, { n: "Athletico-PR", c: "#cc0000" },
+            { n: "Vitória", c: "#ff0000" }, { n: "Bragantino", c: "#ffffff" },
+            { n: "Santos", c: "#ffffff" }, { n: "Coritiba", n: "Coritiba", c: "#006400" },
+            { n: "Mirassol", c: "#ffff00" }, { n: "Remo", c: "#000080" }
+        ];
+
+        const STAGES = ["Oitavas de Final", "Quartas de Final", "Semifinal", "Grande Final"];
+
+        const cv = document.getElementById('main-cv');
+        const ctx = cv.getContext('2d');
+        let cw, ch;
+
+        // Tópico 5 & 25: State Machine
+        let gState = 'MENU'; // MENU, INTRO, AIM_X, AIM_Y, EXECUTE, FEEDBACK, PHASE_COMPLETE, FINALE
+        let playerClub = null;
+        let cpuClub = null;
+        let diffIdx = 0; // 0=Oitavas, 3=Final
+        let scoreP = 0;
+        let scoreC = 0;
+        let currentKicker = 'PLAYER';
+        let antiFreezeTimer = null;
+        let matchEnded = false;
+
+        // 3D Objects (Tópico 1)
+        const ball = { x: 0, y: 0, z: 0, r: 25, startX: 0, startY: 0, targetX: 0, targetY: 0, active: false, t: 0, blocked: false };
+        const goalie = { x: 0, y: 0, z: 1, w: 140, h: 60, jump: 0, jumpTarget: 0 };
+
+        // Controlers (Tópico 2)
+        const slider = { val: 0.5, dir: 1, speed: 0.04, lockedX: 0.5, lockedY: 0.5 };
+
+        function init() {
+            setRez();
+            window.addEventListener('resize', setRez);
+
+            // Build List
+            const list = document.getElementById('team-list');
+            CLUBS.forEach(club => {
+                const b = document.createElement('button');
+                b.className = 'team-btn';
+                b.innerText = club.n;
+                b.onclick = () => selectTeam(club);
+                list.appendChild(b);
+            });
+
+            document.getElementById('btn-start').onclick = enterPitch;
+            document.getElementById('btn-next').onclick = advancePhase;
+
+            // Tópico 20: Foco
+            cv.onclick = () => { if (gState === 'AIM_X') lockX(); else if (gState === 'AIM_Y') lockY(); };
+            window.onkeydown = (e) => {
+                if (e.code === 'Space') {
+                    if (gState === 'AIM_X') lockX(); else if (gState === 'AIM_Y') lockY();
+                }
+            };
+
+            // Start Loop
+            tick();
+        }
+
+        function setRez() {
+            cw = cv.width = window.innerWidth;
+            ch = cv.height = window.innerHeight;
+            if (ch > 720) ch = cv.height = 720;
+            if (cw > 1280) cw = cv.width = 1280;
+        }
+
+        function selectTeam(club) {
+            playerClub = club;
+            document.documentElement.style.setProperty('--p-color', club.c);
+
+            cpuClub = CLUBS[Math.floor(Math.random() * CLUBS.length)];
+            while (cpuClub.n === playerClub.n) cpuClub = CLUBS[Math.floor(Math.random() * CLUBS.length)];
+
+            document.getElementById('match-label').innerText = `${playerClub.n.toUpperCase()} VS ${cpuClub.n.toUpperCase()}`;
+            document.getElementById('stg-title').innerText = STAGES[diffIdx].toUpperCase();
+            setScr('scr-intro');
+        }
+
+        function setScr(id) {
+            document.querySelectorAll('.overlay').forEach(s => s.classList.remove('active'));
+            if (id !== 'none') document.getElementById(id).classList.add('active');
+
+            if (id === 'scr-menu') gState = 'MENU';
+            else if (id === 'scr-intro') gState = 'INTRO';
+            else if (id === 'none') {
+                if (currentKicker === 'PLAYER') {
+                    gState = 'AIM_X';
+                    document.getElementById('shoot-controls').classList.remove('hidden');
+                } else {
+                    gState = 'AIM_X'; // Logic for CPU batedor
+                    setTimeout(cpuShoot, 1500);
+                }
+            }
+        }
+
+        function enterPitch() {
+            setScr('none');
+            document.getElementById('hud-match').classList.remove('hidden');
+            document.getElementById('lbl-usr').innerText = playerClub.n.substring(0, 3).toUpperCase();
+            document.getElementById('lbl-cpu').innerText = cpuClub.n.substring(0, 3).toUpperCase();
+            resetPositions();
+        }
+
+        function resetPositions() {
+            ball.active = false;
+            ball.blocked = false;
+            ball.t = 0;
+            ball.z = 0;
+            ball.x = cw / 2;
+            ball.y = ch * 0.85;
+
+            goalie.x = cw / 2 - goalie.w / 2;
+            goalie.y = ch * 0.25;
+            goalie.jump = 0; goalie.jumpTarget = 0;
+
+            slider.val = 0.5;
+            document.getElementById('shoot-controls').classList.add('hidden');
+            document.getElementById('pop-status').style.opacity = '0';
+        }
+
+        function lockX() {
+            if (gState !== 'AIM_X') return;
+            slider.lockedX = slider.val;
+            gState = 'AIM_Y';
+            slider.val = 1.0; slider.dir = -1;
+            document.getElementById('slider-txt').innerText = "ALTURA / POTÊNCIA (Y)";
+        }
+
+        function lockY() {
+            if (gState !== 'AIM_Y') return;
+            slider.lockedY = slider.val;
+            executeChute();
+        }
+
+        function executeChute() {
+            gState = 'EXECUTE';
+            document.getElementById('shoot-controls').classList.add('hidden');
+            ball.active = true;
+            ball.t = 0;
+            ball.startX = ball.x; ball.startY = ball.y;
+
+            // Tópico 2: Calc Targets
+            ball.targetX = cw * 0.3 + (slider.lockedX * cw * 0.4);
+            ball.targetY = ch * 0.15 + (slider.lockedY * ch * 0.3);
+
+            // Goalkeeper jumps (Tópico 3)
+            goalie.jumpTarget = (slider.lockedX - 0.5) * 400;
+        }
+
+        function cpuShoot() {
+            if (gState !== 'AIM_X') return;
+            gState = 'EXECUTE';
+            ball.active = true;
+            ball.t = 0;
+            ball.startX = ball.x; ball.startY = ball.y;
+
+            ball.targetX = cw * 0.32 + Math.random() * (cw * 0.36);
+            ball.targetY = ch * 0.15 + Math.random() * (ch * 0.3);
+
+            // Player controls goalie now (Keys)
+            goalie.jumpTarget = 0;
+        }
+
+        function tick() {
+            update();
+            render();
+            requestAnimationFrame(tick);
+        }
+
+        function update() {
+            // Slider Logic
+            if (gState === 'AIM_X' || gState === 'AIM_Y') {
+                slider.val += slider.speed * slider.dir;
+                if (slider.val > 1) { slider.val = 1; slider.dir = -1; }
+                if (slider.val < 0) { slider.val = 0; slider.dir = 1; }
+
+                if (gState === 'AIM_X') document.getElementById('cur-x').style.left = (slider.val * 100) + '%';
+                else document.getElementById('cur-y').style.left = (slider.val * 100) + '%';
+            }
+
+            // Tópico 1 & 6: 3D Flight
+            if (ball.active) {
+                ball.t += 0.03; if (ball.t >= 1) ball.t = 1;
+
+                ball.z = ball.t; // Z goes 0 to 1
+                ball.x = ball.startX + (ball.targetX - ball.startX) * ball.t;
+                ball.y = ball.startY + (ball.targetY - ball.startY) * ball.t;
+
+                // Tópico 3: Collision at plane of goal (Z ~ 0.9)
+                if (ball.z > 0.85 && !ball.blocked) {
+                    const gx = goalie.x + goalie.jump;
+                    if (ball.x > gx && ball.x < gx + goalie.w &&
+                        ball.y > goalie.y && ball.y < goalie.y + goalie.h) {
+
+                        // Tópico 31: KILL BUG SWITCH
+                        ball.blocked = true;
+                        ball.active = false;
+                        ball.z = -2; // Hide
+                        resolveLance('SAVE');
+                    }
+                }
+
+                if (ball.t >= 1) {
+                    ball.active = false;
+                    const inGoal = (ball.x > cw * 0.3 && ball.x < cw * 0.7 && ball.y > ch * 0.15 && ball.y < ch * 0.45);
+                    resolveLance(inGoal ? 'GOAL' : 'OUT');
+                }
+            }
+
+            // Goalkeeper Movement (Tópico 13)
+            if (currentKicker === 'PLAYER') {
+                goalie.jump += (goalie.jumpTarget - goalie.jump) * 0.15;
+            } else {
+                // Player is goalie
+                const gSpeed = 15;
+                if (window.inputState && window.inputState.Left) goalie.jump -= gSpeed;
+                if (window.inputState && window.inputState.Right) goalie.jump += gSpeed;
+            }
+        }
+
+        // Tópico 5: Anti-Freeze resolving
+        function resolveLance(type) {
+            if (gState !== 'EXECUTE') return;
+            gState = 'FEEDBACK';
+
+            const el = document.getElementById('pop-status');
+            const map = { 'GOAL': { t: 'GOOOL!', c: varColor('--neon-green') }, 'SAVE': { t: 'DEFENDEU!', c: varColor('--neon-pink') }, 'OUT': { t: 'PARA FORA!', c: '#fff' } };
+
+            el.innerText = map[type].t;
+            el.style.color = map[type].c;
+            el.style.opacity = '1';
+
+            if (type === 'GOAL') {
+                if (currentKicker === 'PLAYER') scoreP++; else scoreC++;
+            }
+            updatePoints();
+
+            // Tópico 5: Timeout 1500ms
+            setTimeout(() => {
+                checkCycle();
+            }, 1600);
+        }
+
+        function checkCycle() {
+            // Tópico 8: Sudden Death 3 Gols
+            if (scoreP >= 3 || scoreC >= 3) {
+                if (scoreP >= 3) {
+                    gState = 'PHASE_COMPLETE';
+                    setScr('scr-pass');
+                } else {
+                    gState = 'PHASE_COMPLETE';
+                    setScr('scr-loss');
+                }
+                document.getElementById('hud-match').classList.add('hidden');
+            } else {
+                currentKicker = (currentKicker === 'PLAYER') ? 'CPU' : 'PLAYER';
+                resetPositions();
+                enterPitch();
+            }
+        }
+
+        function updatePoints() {
+            document.getElementById('sc-usr').innerText = scoreP;
+            document.getElementById('sc-cpu').innerText = scoreC;
+        }
+
+        // Tópico 11: RESET ABSOLUTO
+        function advancePhase() {
+            scoreP = 0; scoreC = 0;
+            updatePoints();
+            diffIdx++;
+            if (diffIdx >= STAGES.length) {
+                document.getElementById('final-winner').innerText = playerClub.n.toUpperCase();
+                setScr('scr-final');
+                gState = 'FINALE';
+            } else {
+                currentKicker = 'PLAYER';
+                selectTeam(playerClub);
+            }
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, cw, ch);
+            if (gState === 'MENU' || gState === 'INTRO') return;
+
+            // Pitch Floor perspective
+            ctx.fillStyle = "rgba(0, 255, 136, 0.05)";
+            ctx.beginPath();
+            ctx.moveTo(cw * 0.1, ch); ctx.lineTo(cw * 0.3, ch * 0.45);
+            ctx.lineTo(cw * 0.7, ch * 0.45); ctx.lineTo(cw * 0.9, ch);
+            ctx.fill();
+
+            // Goal Neon (Tópico 1, 14, 21)
+            ctx.strokeStyle = varColor('--neon-blue');
+            ctx.lineWidth = 10;
+            ctx.strokeRect(cw * 0.3, ch * 0.15, cw * 0.4, ch * 0.3); // Goal frame
+
+            // Net Mesh
+            ctx.strokeStyle = "rgba(255,255,255,0.1)";
+            ctx.lineWidth = 2;
+            for (let i = 1; i < 10; i++) {
+                ctx.beginPath(); ctx.moveTo(cw * 0.3 + (i * cw * 0.04), ch * 0.15); ctx.lineTo(cw * 0.3 + (i * cw * 0.04), ch * 0.45); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cw * 0.3, ch * 0.15 + (i * ch * 0.03)); ctx.lineTo(cw * 0.7, ch * 0.15 + (i * ch * 0.03)); ctx.stroke();
+            }
+
+            // Goleiro (Tópico 3, 25)
+            const gx = goalie.x + goalie.jump;
+            const gCol = (currentKicker === 'PLAYER') ? cpuClub.c : playerClub.c;
+            ctx.fillStyle = gCol;
+            ctx.shadowBlur = 40; ctx.shadowColor = gCol;
+            ctx.fillRect(gx, goalie.y, goalie.w, goalie.h);
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = "#fff"; ctx.lineWidth = 4;
+            ctx.strokeRect(gx, goalie.y, goalie.w, goalie.h);
+
+            // Ball 3D (Tópico 1)
+            if (ball.z >= 0 || gState === 'AIM_X') {
+                const scale = 1 / (1 + ball.z * 1.5);
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.r * scale, 0, Math.PI * 2);
+                ctx.fillStyle = "#fff";
+                ctx.shadowBlur = 20 * scale; ctx.shadowColor = "#fff";
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        const varColor = (v) => getComputedStyle(document.documentElement).getPropertyValue(v);
+
+        window.onload = init;
+
+        // Input helper
+        window.inputState = { Left: false, Right: false };
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') window.inputState.Left = true;
+            if (e.code === 'ArrowRight' || e.code === 'KeyD') window.inputState.Right = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') window.inputState.Left = false;
+            if (e.code === 'ArrowRight' || e.code === 'KeyD') window.inputState.Right = false;
+        });
+    </script>
 </body>
 
 </html>
